@@ -1,0 +1,12 @@
+﻿{
+  "apikeys": {
+    "google": ""
+  },
+  "bot": {
+    "token": ""
+  },
+  "users": {
+    "owner": 1000000000000000000, // <@yourusername
+    "dev": 133118499923951616
+  }
+}
