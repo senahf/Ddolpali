@@ -35,7 +35,7 @@ namespace aegyoBot
                 x.PrefixChar = Convert.ToChar(">");
                 x.HelpMode = HelpMode.Public;
                 // x.ExecuteHandler
-                // x.ErrorHandler [ChatterBotAPI? (aka CleverBot for Invalid commands]
+                // x.ErrorHandler [ChatterBotAPI? (aka CleverBot for Invalid commands)]
             })
             .UsingModules()
             .UsingAudio(x =>
@@ -69,7 +69,8 @@ namespace aegyoBot
 
         private static async void Client_MessageReceived(object sender, MessageEventArgs e)
         {
-            
+            // TODO: Twitch emote? Kakao emote?
+            // TODO: Notifcations command
         }
     }
 }
