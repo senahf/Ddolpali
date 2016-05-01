@@ -12,7 +12,7 @@ namespace aegyoBot
         private const string path = "./config/global.json";
         private static GlobalSettings _instance = new GlobalSettings();
 
-        private static void Load()
+        public static void Load()
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException($"{path} was not found.");
