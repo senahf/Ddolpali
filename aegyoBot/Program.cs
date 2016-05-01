@@ -8,6 +8,7 @@ using aegyoBot.Services;
 using aegyoBot.Modules.Public;
 using aegyoBot.Modules.Drama;
 using aegyoBot.Modules.Admin;
+using Discord.Commands.Permissions.Levels;
 
 namespace aegyoBot
 {
@@ -42,7 +43,7 @@ namespace aegyoBot
                 // x.ErrorHandler [ChatterBotAPI? (aka CleverBot for Invalid commands)]
             })
             .UsingModules()
-            
+            .UsingPermissionLevels(PermissionResolver)
             .UsingAudio(x =>
             {
                 x.Mode = AudioMode.Outgoing;
