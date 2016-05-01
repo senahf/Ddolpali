@@ -4,6 +4,10 @@ using Discord.Modules;
 using Discord.Commands;
 using Discord.Audio;
 using Discord;
+using aegyoBot.Services;
+using aegyoBot.Modules.Public;
+using aegyoBot.Modules.Drama;
+using aegyoBot.Modules.Admin;
 
 namespace aegyoBot
 {
@@ -38,6 +42,7 @@ namespace aegyoBot
                 // x.ErrorHandler [ChatterBotAPI? (aka CleverBot for Invalid commands)]
             })
             .UsingModules()
+            
             .UsingAudio(x =>
             {
                 x.Mode = AudioMode.Outgoing;
@@ -47,6 +52,12 @@ namespace aegyoBot
                 x.BufferLength = 10000;
             });
             _client.MessageReceived += Client_MessageReceived;
+            _client.AddService<SettingsService>();
+            _client.AddService<HttpService>();
+            _client.AddModule<PublicModule>("Public", ModuleFilter.None);
+            _client.AddModule<DramaModule>("Drama", ModuleFilter.None);
+            _client.AddModule<ServerModule>("Server", ModuleFilter.None);
+            _client.AddModule<ColorModule>("Color", ModuleFilter.None);
 
             _client.ExecuteAndWait(async () =>
             {
