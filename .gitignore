@@ -7,7 +7,7 @@
 obj/
 *.userprefs
 !**/config/global.json
-
+*.lock.json
 
 # Compiled source #
 ###################
