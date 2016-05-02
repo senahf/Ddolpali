@@ -23,7 +23,8 @@ namespace aegyoBot
 
         private void Start(string[] args)
         {
-            Console.WriteLine("Welcome to aegyoBot!");
+            Console.WriteLine($"Welcome to {AppName}");
+
             GlobalSettings.Load();
 
             _client = new DiscordClient(x =>
@@ -72,7 +73,7 @@ namespace aegyoBot
                         break;
                     } catch (Exception ex)
                     {
-                        _client.Log.Error($"Login Failed", ex);
+                        Console.WriteLine($"Login Failed {ex}");
                         await Task.Delay(_client.Config.FailedReconnectDelay);
                     }
                 }
