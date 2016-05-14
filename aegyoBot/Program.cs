@@ -191,7 +191,6 @@ namespace aegyoBot
             {
                 try
                 {
-                    Thread.Sleep(2000);
                     Thread.CurrentThread.IsBackground = true;
                     using (StreamReader file = new StreamReader("notifications.txt"))
                     {
@@ -204,14 +203,24 @@ namespace aegyoBot
                             string keyword = (index > 0 ? line.Substring(0, index) : "");
                             string user = line.Substring(line.LastIndexOf(';') + 1);
                             keyword = keyword.Remove(0, 2).ToLower();
-                            if (e.Message.Text.ToLower().Contains(keyword))
+                            string[] words = e.Message.Text.ToLower().Split(' ');
+                            bool rwar = false;
+                            
+                            foreach (string word in words)
                             {
-                                if (Convert.ToUInt64(user) == e.User.Id) return;
+                                int sim = DramaModule.Difference(keyword, word);
+                                if (sim > 3) // haven't tried > 1 yet
+                                {
+                                    if (Convert.ToUInt64(user) == e.User.Id) return;
+                                    rwar = true;
+                                }
+                            }
+                            if (rwar)
+                            {
                                 Channel rawr = await _client.CreatePrivateChannel(Convert.ToUInt64(user));
                                 await rawr.SendMessage($"{e.User.Name} mentioned you [{keyword}] in #{e.Channel.Name} with the following message:{Environment.NewLine}```xl{Environment.NewLine}{e.Message.Text}```");
                             }
                         }
-
                     }
                 }
                 catch (Exception ex)
