@@ -8,6 +8,7 @@ obj/
 *.userprefs
 !**/config/global.json
 *.lock.json
+notifications.txt
 
 # Compiled source #
 ###################
