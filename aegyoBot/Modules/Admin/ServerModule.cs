@@ -22,7 +22,7 @@ namespace aegyoBot.Modules.Admin
             {
                 group.CreateCommand("setname")
                     .Description("Sets the name of the bot")
-                    .Parameter("New Name")
+                    .Parameter("New Name", ParameterType.Unparsed)
                     .MinPermissions((int)PermissionLevel.BotOwner)
                     .Do(async e =>
                     {
