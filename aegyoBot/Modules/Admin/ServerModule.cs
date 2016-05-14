@@ -17,13 +17,11 @@ namespace aegyoBot.Modules.Admin
     {
         private ModuleManager _manager;
         private DiscordClient _client;
-        
+
         public void Install(ModuleManager manager)
         {
             _manager = manager;
             _client = manager.Client;
-
-            //_client.UserJoined += UserJoined;
 
             manager.CreateCommands("", group =>
             {
@@ -71,7 +69,7 @@ namespace aegyoBot.Modules.Admin
                         WebClient wc = new WebClient();
                         byte[] bytes = wc.DownloadData(e.Args[0]);
                         MemoryStream ms = new MemoryStream(bytes);
-                       
+
                         await _client.CurrentUser.Edit(avatar: ms);
                     });
             });

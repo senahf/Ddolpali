@@ -58,6 +58,8 @@ namespace aegyoBot
             });
             _client2.AddModule<ServerModule>("Server", ModuleFilter.None);
             _client2.AddModule<PublicModule>("Public", ModuleFilter.None);
+            _client2.AddModule<GreetModule>("Greet", ModuleFilter.None);
+
             _client2.ExecuteAndWait(async () =>
              {
                  while (true)
@@ -65,8 +67,8 @@ namespace aegyoBot
                      try
                      {
                          await _client2.Connect("MTY2MDU0OTc0OTE5NDA5NjY0.CeI6Pw.Q5sWWEcqx_PVOEULla0Ml0dtRB4"); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
-                         _client2.SetGame("Welcome to #KDrama");
-                         Console.WriteLine("Bot has been initialized!");
+                         _client2.SetGame("Welcome");
+                         Console.WriteLine("Song Joong Ki has been initialized! (Welcome Bot)");
                          break;
                      }
                      catch (Exception ex)
@@ -117,8 +119,8 @@ namespace aegyoBot
                          try
                          {
                              await _client.Connect(GlobalSettings.Discord.Token); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
-                             _client.SetGame("#KDrama Notifications");
-                             Console.WriteLine("Bot has been initialized!");
+                             _client.SetGame("Notifications");
+                             Console.WriteLine("Park Shin Hye has been Intitialize! (Notifications)");
                              break;
                          }
                          catch (Exception ex)
