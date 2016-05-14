@@ -9,6 +9,8 @@ using aegyoBot.Modules.Public;
 using aegyoBot.Modules.Drama;
 using aegyoBot.Modules.Admin;
 using Discord.Commands.Permissions.Levels;
+using System.Threading;
+using System.IO;
 
 namespace aegyoBot
 {
@@ -84,6 +86,40 @@ namespace aegyoBot
         {
             // TODO: Twitch emote? Kakao emote?
             // TODO: Notifcations command
+            if (e.Message.Text.StartsWith(">") || e.Message.Text.StartsWith(".") || e.Message.Text.StartsWith("~") || e.Channel == null || e.User.Id == 153586072092147712 || e.Server == null) return; // || e.User.Id == client.CurrentUser.Id
+            new Thread(async () =>
+            {
+                try
+                {
+                    Thread.Sleep(2000);
+                    Thread.CurrentThread.IsBackground = true;
+                    String CurrentLine;
+                    int LastLineNumber = 0;
+                    using (StreamReader file = new StreamReader("notifications.txt"))
+                    {
+                        for (int i = 0; i < LastLineNumber; ++i)
+                            file.ReadLine();
+
+                        CurrentLine = file.ReadLine();
+                        int index = CurrentLine.IndexOf(";");
+                        string keyword = (index > 0 ? CurrentLine.Substring(0, index) : "");
+                        string user = CurrentLine.Substring(CurrentLine.LastIndexOf(';') + 1);
+                        keyword = keyword.Remove(0, 2);
+                        keyword = keyword.ToLower();
+                        if (e.Message.Text.ToLower().Contains(keyword))
+                        {
+                            if (Convert.ToUInt64(user) == e.User.Id) return;
+                            Channel rawr = await _client.CreatePrivateChannel(Convert.ToUInt64(user));
+                            await rawr.SendMessage($"{e.User.Name} mentioned you in {e.Channel.Name} with the following message:\r\n```{e.Message.Text}```\r\n`{keyword}`");
+                        }
+                        LastLineNumber++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }).Start();
         }
 
         private int PermissionResolver(User user, Channel channel)

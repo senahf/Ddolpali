@@ -46,6 +46,7 @@ namespace aegyoBot.Modules.Drama
 
                             File.AppendAllText("notifications.txt", $"{entry}\r\n");
                             await e.User.SendMessage($"{e.User.Mention}: Added notification for `{e.GetArg("keyword")}`");
+                            
                         }
                         catch (Exception ex)
                         {
