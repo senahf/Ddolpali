@@ -23,7 +23,7 @@ namespace aegyoBot
 
         public static DiscordClient _client;
         public static DiscordClient _client2;
-
+        public static DiscordClient _client3;
 
         private void Start(string[] args)
         {
@@ -66,7 +66,7 @@ namespace aegyoBot
                  {
                      try
                      {
-                         await _client2.Connect("MTY2MDU0OTc0OTE5NDA5NjY0.CeI6Pw.Q5sWWEcqx_PVOEULla0Ml0dtRB4"); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
+                         await _client2.Connect(GlobalSettings.Discord.Token2); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
                          _client2.SetGame("Welcome");
                          Console.WriteLine("Song Joong Ki has been initialized! (Welcome Bot)");
                          break;
@@ -120,7 +120,7 @@ namespace aegyoBot
                          {
                              await _client.Connect(GlobalSettings.Discord.Token); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
                              _client.SetGame("Notifications");
-                             Console.WriteLine("Park Shin Hye has been Intitialize! (Notifications)");
+                             Console.WriteLine("Park Shin Hye has been initialized! (Notifications)");
                              break;
                          }
                          catch (Exception ex)
@@ -129,12 +129,59 @@ namespace aegyoBot
                              await Task.Delay(_client.Config.FailedReconnectDelay);
                          }
                      }
+                     _client3 = new DiscordClient(x =>
+                     {
+                         x.AppName = AppName;
+                         x.AppUrl = AppUrl;
+                         x.MessageCacheSize = 0;
+                         x.UsePermissionsCache = true;
+                         x.EnablePreUpdateEvents = true;
+                     })
+            .UsingCommands(x =>
+            {
+                x.AllowMentionPrefix = false;
+                x.PrefixChar = Convert.ToChar("~");
+                x.HelpMode = HelpMode.Public;
+                // x.ExecuteHandler
+                // x.ErrorHandler [ChatterBotAPI? (aka CleverBot for Invalid commands)]
+            })
+            .UsingModules()
+            .UsingPermissionLevels(PermissionResolver)
+            .UsingAudio(x =>
+            {
+                x.Mode = AudioMode.Outgoing;
+                x.EnableMultiserver = true;
+                x.EnableEncryption = true;
+                x.Bitrate = AudioServiceConfig.MaxBitrate;
+                x.BufferLength = 10000;
+            });
+                     _client3.AddService<SettingsService>();
+                     _client3.AddService<HttpService>();
+                     _client3.AddModule<PublicModule>("Public", ModuleFilter.None);
+                     _client3.AddModule<ServerModule>("Server", ModuleFilter.None);
+                     _client3.AddModule<FeedModule>("Feeds", ModuleFilter.None);
+
+                     _client3.ExecuteAndWait(async () =>
+                     {
+                         while (true)
+                         {
+                             try
+                             {
+                                 await _client3.Connect(GlobalSettings.Discord.Token3); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
+                                 _client3.SetGame("Placeholder");
+                                 Console.WriteLine("Gong Hyo Jin has been initialized! (Twitch)");
+                                 break;
+                             }
+                             catch (Exception ex)
+                             {
+                                 Console.WriteLine($"Login Failed {ex}");
+                                 await Task.Delay(_client3.Config.FailedReconnectDelay);
+                             }
+                         }
+                     });
                  });
              });
-            
-
         }
-
         private static async void Client_MessageReceived(object sender, MessageEventArgs e)
         {
             // TODO: Twitch emote? Kakao emote?
@@ -150,7 +197,7 @@ namespace aegyoBot
                     {
                         //string[] result = file.ReadToEnd().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                         //foreach (string line in result)
-                        while(!file.EndOfStream)
+                        while (!file.EndOfStream)
                         {
                             string line = file.ReadLine();
                             int index = line.IndexOf(";");
@@ -164,7 +211,7 @@ namespace aegyoBot
                                 await rawr.SendMessage($"{e.User.Name} mentioned you [{keyword}] in #{e.Channel.Name} with the following message:{Environment.NewLine}```xl{Environment.NewLine}{e.Message.Text}```");
                             }
                         }
-                        
+
                     }
                 }
                 catch (Exception ex)

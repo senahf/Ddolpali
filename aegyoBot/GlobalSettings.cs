@@ -40,6 +40,10 @@ namespace aegyoBot
         {
             [JsonProperty("token")]
             public string Token;
+            [JsonProperty("token2")]
+            public string Token2;
+            [JsonProperty("token3")]
+            public string Token3;
         }
         [JsonProperty("bot")]
         private DiscordSettings _discord = new DiscordSettings();

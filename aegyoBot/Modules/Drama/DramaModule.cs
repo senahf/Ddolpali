@@ -31,22 +31,23 @@ namespace aegyoBot.Modules.Drama
                     .Parameter("keyword", ParameterType.Unparsed)
                     .Do(async e =>
                     {
-                        if (string.IsNullOrWhiteSpace(e.GetArg("keyword")))
+                        string keyword = e.GetArg("keyword").ToLower();
+                        if (string.IsNullOrWhiteSpace(keyword))
                         {
                             await e.Channel.SendMessage($"The correct syntax for the command is ```xl\n!notification keyword(s) here```");
                             return;
                         }
                         try
                         {
-                            String entry = $"KD{e.GetArg("keyword")};{e.User.Id}";
+                            String entry = $"KD{keyword};{e.User.Id}";
                             if (File.ReadAllText("notifications.txt").Contains(entry))
                             {
-                                await e.Channel.SendMessage($"{e.User.Mention}, You already have a notification for **{e.GetArg("keyword")}**");
+                                await e.Channel.SendMessage($"{e.User.Mention}, You already have a notification for **{keyword}**");
                                 return;
                             }
 
                             File.AppendAllText("notifications.txt", $"{entry}\r\n");
-                            await e.User.SendMessage($"{e.User.Mention}: Added notification for `{e.GetArg("keyword")}`");
+                            await e.User.SendMessage($"{e.User.Mention}: Added notification for `{keyword}`");
 
                         }
                         catch (Exception ex)
