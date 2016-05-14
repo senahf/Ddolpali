@@ -32,7 +32,7 @@ namespace aegyoBot.Modules.Admin
 
                 group.CreateCommand("setgame")
                     .Description("Sets the game playing to the specified argument")
-                    .Parameter("Game")
+                    .Parameter("Game", ParameterType.Unparsed)
                     .MinPermissions((int)PermissionLevel.BotOwner)
                     .Do(async e =>
                     {
