@@ -55,6 +55,43 @@ namespace aegyoBot.Modules.Drama
                             Console.WriteLine($"Notifications: {ex}");
                         }
                     });
+
+                group.CreateCommand("dnotif") // todo: maybe have IDs instead for notifications?
+                    .Alias("delnotif")
+                    .Description("Deletes the specified notification!")
+                    .Parameter("keyword", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        string keyword = e.GetArg("keyword").ToLower();
+                        List<string> Entries = new List<string>();
+
+                        try
+                        {
+                            using (StreamReader file = new StreamReader("notifications.txt"))
+                            {
+                                while (!file.EndOfStream)
+                                {
+                                    string line = file.ReadLine();
+                                    Entries.Add(line);
+                                }
+                            }
+                            String entry = $"KD{keyword};{e.User.Id}";
+                            if (Entries.Contains(entry))
+                            {
+                                Entries.Remove(entry);
+                                File.WriteAllLines("notifications.txt", Entries);
+                                await e.Channel.SendMessage($"Deleted `{keyword}`");
+                            } else
+                            {
+                                await e.Channel.SendMessage($"Keyword [{keyword}] does not exist!");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error getting notifs: " + ex);
+                        }
+                    });
+
                 group.CreateCommand("notifs")
                 .Alias("notifications")
                 .Do(async e =>
