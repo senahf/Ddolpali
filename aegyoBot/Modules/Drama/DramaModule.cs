@@ -7,6 +7,7 @@ using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using System.IO;
+using System.Threading;
 
 namespace aegyoBot.Modules.Drama
 {
@@ -46,13 +47,41 @@ namespace aegyoBot.Modules.Drama
 
                             File.AppendAllText("notifications.txt", $"{entry}\r\n");
                             await e.User.SendMessage($"{e.User.Mention}: Added notification for `{e.GetArg("keyword")}`");
-                            
+
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine($"Notifications: {ex}");
                         }
                     });
+                group.CreateCommand("notifs")
+                .Alias("notifications")
+                .Do(async e =>
+                {
+                    List<string> Entries = new List<string>();
+                    try
+                    {
+                        using (StreamReader file = new StreamReader("notifications.txt"))
+                        {
+                            while (!file.EndOfStream)
+                            {
+                                string line = file.ReadLine();
+                                int index = line.IndexOf(";");
+                                string keyword = (index > 0 ? line.Substring(0, index) : "").Remove(0, 2).ToLower();
+                                string user = line.Substring(line.LastIndexOf(';') + 1);
+                                if (user == e.User.Id.ToString())
+                                {
+                                    Entries.Add(keyword);
+                                }
+                            }
+                            
+                            await e.Channel.SendMessage(String.Join(", ", Entries));
+                        }
+                    } catch (Exception ex)
+                    {
+                        Console.WriteLine("Error getting notifs: " + ex);
+                    }
+                });
             });
         }
     }
