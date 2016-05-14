@@ -22,14 +22,15 @@ namespace aegyoBot
         private const string AppUrl = "https://github.com/senahf/aegyoBot";
 
         public static DiscordClient _client;
+        public static DiscordClient _client2;
+
 
         private void Start(string[] args)
         {
             Console.WriteLine($"Welcome to {AppName}");
-
+            /* Song Joong Ki*/
             GlobalSettings.Load();
-
-            _client = new DiscordClient(x =>
+            _client2 = new DiscordClient(x =>
             {
                 x.AppName = AppName;
                 x.AppUrl = AppUrl;
@@ -37,6 +38,52 @@ namespace aegyoBot
                 x.UsePermissionsCache = true;
                 x.EnablePreUpdateEvents = true;
             })
+            .UsingCommands(x =>
+             {
+                 x.AllowMentionPrefix = false;
+                 x.PrefixChar = Convert.ToChar("!");
+                 x.HelpMode = HelpMode.Public;
+                 // x.ExecuteHandler
+                 // x.ErrorHandler [ChatterBotAPI? (aka CleverBot for Invalid commands)]
+             })
+            .UsingModules()
+            .UsingPermissionLevels(PermissionResolver)
+            .UsingAudio(x =>
+            {
+                x.Mode = AudioMode.Outgoing;
+                x.EnableMultiserver = true;
+                x.EnableEncryption = true;
+                x.Bitrate = AudioServiceConfig.MaxBitrate;
+                x.BufferLength = 10000;
+            });
+            _client2.AddModule<ServerModule>("Server", ModuleFilter.None);
+            _client2.AddModule<PublicModule>("Public", ModuleFilter.None);
+            _client2.ExecuteAndWait(async () =>
+             {
+                 while (true)
+                 {
+                     try
+                     {
+                         await _client2.Connect("MTY2MDU0OTc0OTE5NDA5NjY0.CeI6Pw.Q5sWWEcqx_PVOEULla0Ml0dtRB4"); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
+                         _client2.SetGame("Welcome to #KDrama");
+                         Console.WriteLine("Bot has been initialized!");
+                         break;
+                     }
+                     catch (Exception ex)
+                     {
+                         Console.WriteLine($"Login Failed {ex}");
+                         await Task.Delay(_client2.Config.FailedReconnectDelay);
+                     }
+                 }
+                 /* MAIN BOT (Park Shin Hye)*/
+                 _client = new DiscordClient(x =>
+                 {
+                     x.AppName = AppName;
+                     x.AppUrl = AppUrl;
+                     x.MessageCacheSize = 0;
+                     x.UsePermissionsCache = true;
+                     x.EnablePreUpdateEvents = true;
+                 })
             .UsingCommands(x =>
             {
                 x.AllowMentionPrefix = false;
@@ -55,31 +102,35 @@ namespace aegyoBot
                 x.Bitrate = AudioServiceConfig.MaxBitrate;
                 x.BufferLength = 10000;
             });
-            _client.MessageReceived += Client_MessageReceived;
-            _client.AddService<SettingsService>();
-            _client.AddService<HttpService>();
-            _client.AddModule<PublicModule>("Public", ModuleFilter.None);
-            _client.AddModule<DramaModule>("Drama", ModuleFilter.None);
-            _client.AddModule<ServerModule>("Server", ModuleFilter.None);
-            _client.AddModule<ColorModule>("Color", ModuleFilter.None);
+                 _client.MessageReceived += Client_MessageReceived;
+                 _client.AddService<SettingsService>();
+                 _client.AddService<HttpService>();
+                 _client.AddModule<PublicModule>("Public", ModuleFilter.None);
+                 _client.AddModule<DramaModule>("Drama", ModuleFilter.None);
+                 _client.AddModule<ServerModule>("Server", ModuleFilter.None);
+                 _client.AddModule<ColorModule>("Color", ModuleFilter.None);
 
-            _client.ExecuteAndWait(async () =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        await _client.Connect(GlobalSettings.Discord.Token); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
-                        _client.SetGame("#KDrama");
-                        Console.WriteLine("Bot has been initialized!");
-                        break;
-                    } catch (Exception ex)
-                    {
-                        Console.WriteLine($"Login Failed {ex}");
-                        await Task.Delay(_client.Config.FailedReconnectDelay);
-                    }
-                }
-            });
+                 _client.ExecuteAndWait(async () =>
+                 {
+                     while (true)
+                     {
+                         try
+                         {
+                             await _client.Connect(GlobalSettings.Discord.Token); // await _client.Connect(GlobalSettings.Discord.User, GlobalSettings.Discord.Pass);
+                             _client.SetGame("#KDrama Notifications");
+                             Console.WriteLine("Bot has been initialized!");
+                             break;
+                         }
+                         catch (Exception ex)
+                         {
+                             Console.WriteLine($"Login Failed {ex}");
+                             await Task.Delay(_client.Config.FailedReconnectDelay);
+                         }
+                     }
+                 });
+             });
+            
+
         }
 
         private static async void Client_MessageReceived(object sender, MessageEventArgs e)

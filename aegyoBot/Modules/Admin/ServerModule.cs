@@ -17,10 +17,13 @@ namespace aegyoBot.Modules.Admin
     {
         private ModuleManager _manager;
         private DiscordClient _client;
+        
         public void Install(ModuleManager manager)
         {
             _manager = manager;
             _client = manager.Client;
+
+            //_client.UserJoined += UserJoined;
 
             manager.CreateCommands("", group =>
             {
