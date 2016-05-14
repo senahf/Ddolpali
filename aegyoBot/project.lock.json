@@ -577,6 +577,8 @@
       "Discord.Net.Modules >= 0.9.0-rc3"
     ],
     "DNX,Version=v4.5.1": [
+      "fx/PresentationFramework >= 4.0.0",
+      "fx/System.Drawing >= 4.0.0",
       "fx/System.Net.Http >= 4.0.0"
     ]
   }

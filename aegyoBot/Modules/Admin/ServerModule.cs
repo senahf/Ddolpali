@@ -5,6 +5,10 @@ using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
+using System.IO;
+using System.Net;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace aegyoBot.Modules.Admin
 {
@@ -54,6 +58,18 @@ namespace aegyoBot.Modules.Admin
                             await msg.Delete();
                             await Task.Delay(100);
                         }
+                    });
+                group.CreateCommand("newavatar")
+                    .Description("Sets the avatar.")
+                    .Parameter("url")
+                    .MinPermissions((int)PermissionLevel.BotOwner)
+                    .Do(async e =>
+                    {
+                        WebClient wc = new WebClient();
+                        byte[] bytes = wc.DownloadData(e.Args[0]);
+                        MemoryStream ms = new MemoryStream(bytes);
+                       
+                        await _client.CurrentUser.Edit(avatar: ms);
                     });
             });
         }
