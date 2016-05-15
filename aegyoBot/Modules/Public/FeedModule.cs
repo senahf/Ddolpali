@@ -29,12 +29,11 @@ namespace aegyoBot.Modules.Drama
                 {
                     try
                     {
-
-
                         var handler = new ClearanceHandler();
                         var client = new HttpClient(handler);
+                        client.Timeout = TimeSpan.FromSeconds(8);
                         File.AppendAllText("kissasian.html", await client.GetStringAsync("http://kissasian.com/"));
-                        HtmlDocument doc = new HtmlDocument();
+                        /*HtmlDocument doc = new HtmlDocument();
                         doc.Load("kissasian.html");
                         var root = doc.DocumentNode;
                         var a = root.Descendants()
@@ -42,8 +41,16 @@ namespace aegyoBot.Modules.Drama
                             .Single()
                             .Descendants("a")
                             .Single();
-                        var content = a.InnerText;
-                        await e.Channel.SendMessage($"{a}");
+                        var content = a.InnerText;*/
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.Load("kissasian.html");
+                        var root = doc.DocumentNode;
+                        var a_nodes = root.Descendants("a").ToList();
+                        
+                        foreach (var a_node in a_nodes)
+                        {
+                            Console.WriteLine("TEXT: {0}", a_node.InnerHtml);
+                        }
                     }
                     catch (Exception ex)
                     {

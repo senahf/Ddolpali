@@ -189,6 +189,7 @@ namespace aegyoBot
             if (e.Message.Text.StartsWith(">") || e.Message.Text.StartsWith(".") || e.Message.Text.StartsWith("~") || e.Channel == null || e.User.Id == _client.CurrentUser.Id || e.Server == null) return; // || e.User.Id == client.CurrentUser.Id
             new Thread(async () =>
             {
+                if (e.Server.Id != 170293626927185921) return;
                 try
                 {
                     Thread.CurrentThread.IsBackground = true;
@@ -205,16 +206,21 @@ namespace aegyoBot
                             keyword = keyword.Remove(0, 2).ToLower();
                             string[] words = e.Message.Text.ToLower().Split(' ');
                             bool rwar = false;
-                            
+                            if (e.Message.Text.Contains(keyword))
+                            {
+                                if (Convert.ToUInt64(user) == e.User.Id) return;
+                                rwar = true;
+                            }
+                            /*
                             foreach (string word in words)
                             {
                                 int sim = DramaModule.Difference(keyword, word);
-                                if (sim > 3) // haven't tried > 1 yet
+                                if (sim == 4) // haven't tried > 1 yet
                                 {
                                     if (Convert.ToUInt64(user) == e.User.Id) return;
                                     rwar = true;
                                 }
-                            }
+                            }*/
                             if (rwar)
                             {
                                 Channel rawr = await _client.CreatePrivateChannel(Convert.ToUInt64(user));
