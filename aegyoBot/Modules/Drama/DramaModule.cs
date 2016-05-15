@@ -9,6 +9,7 @@ using Discord.Modules;
 using System.IO;
 using System.Threading;
 using System.Text;
+using System.Collections;
 
 namespace aegyoBot.Modules.Drama
 {

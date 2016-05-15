@@ -21,6 +21,10 @@
           "PresentationFramework": "4.0.0.0",
           "System.Drawing": "4.0.0.0",
           "System.Net.Http": "4.0.0.0"
+        },
+        "dependencies": {
+          "CloudFlareUtilities": "1.0.0-*",
+          "HtmlAgilityPack": "1.0.0-*"
         }
       }
     }

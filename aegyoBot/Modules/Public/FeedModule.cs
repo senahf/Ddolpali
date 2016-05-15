@@ -1,18 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
+﻿using Discord;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
+using CloudFlareUtilities;
+using System.Net.Http;
+using HtmlAgilityPack;
 using System.IO;
-using System.Net;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.Linq;
+using System;
 
-namespace aegyoBot.Modules.Public
+namespace aegyoBot.Modules.Drama
 {
-
     internal class FeedModule : IModule
     {
         private ModuleManager _manager;
@@ -25,14 +22,33 @@ namespace aegyoBot.Modules.Public
 
             manager.CreateCommands("", group =>
             {
-                group.MinPermissions((int)PermissionLevel.ServerAdmin);
+                group.MinPermissions((int)PermissionLevel.User);
 
-                group.CreateCommand("")
-                .Alias("")
-                .Parameter("url", ParameterType.Required)
-                .Do(async e => {
+                group.CreateCommand("test")
+                .Do(async e =>
+                {
+                    try
+                    {
 
-                    await e.Channel.SendMessage("Feeds Updated!");
+
+                        var handler = new ClearanceHandler();
+                        var client = new HttpClient(handler);
+                        File.AppendAllText("kissasian.html", await client.GetStringAsync("http://kissasian.com/"));
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.Load("kissasian.html");
+                        var root = doc.DocumentNode;
+                        var a = root.Descendants()
+                            .Where(n => n.GetAttributeValue("class", "").Equals("barContent"))
+                            .Single()
+                            .Descendants("a")
+                            .Single();
+                        var content = a.InnerText;
+                        await e.Channel.SendMessage($"{a}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
                 });
             });
         }

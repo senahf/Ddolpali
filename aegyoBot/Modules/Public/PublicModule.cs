@@ -6,6 +6,8 @@ using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
+using CloudFlareUtilities;
+using System.Net.Http;
 
 namespace aegyoBot.Modules.Public
 {
@@ -18,6 +20,7 @@ namespace aegyoBot.Modules.Public
         {
             _manager = manager;
             _client = manager.Client;
+            
 
             manager.CreateCommands("", group =>
             {
