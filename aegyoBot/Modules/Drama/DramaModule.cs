@@ -195,8 +195,11 @@ namespace aegyoBot.Modules.Drama
                                     Entries.Add(keyword);
                                 }
                             }
-                            
-                            await e.Channel.SendMessage(String.Join(", ", Entries));
+                            if (!Entries.Any())
+                            {
+                                await e.Channel.SendMessage($"{e.User.Mention}, You don't have any notifications!");
+                            } else
+                                await e.Channel.SendMessage(String.Join(", ", Entries));
                         }
                     } catch (Exception ex)
                     {
